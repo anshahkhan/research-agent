@@ -1,0 +1,23 @@
+{
+  "name": "research-agent",
+  "version": "1.0.0",
+  "description": "Research Agent WhatsApp Bot using Baileys",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@whiskeysockets/baileys": "^7.0.0-rc.4",
+    "baileys": "6.7.18",
+    "pino": "^9.0.0",
+    "qrcode-terminal": "^0.12.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "author": "Research Agent Team",
+  "license": "MIT"
+}

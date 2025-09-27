@@ -1,0 +1,227 @@
+{
+  "Personas": {
+    "persona_id": "int (PK)",
+    "full_name": "string",
+    "date_of_birth": "date",
+    "gender": "string",
+    "nationality": "string",
+    "marital_status": "string",
+    "phone_number": "string",
+    "email": "string"
+  },
+
+  "SocialMediaHandles": {
+    "handle_id": "int (PK)",
+    "persona_id": "int (FK -> Personas)",
+    "platform": "string",
+    "url_or_username": "string"
+  },
+
+  "Addresses": {
+    "address_id": "int (PK)",
+    "persona_id": "int (FK -> Personas)",
+    "street": "string",
+    "city": "string",
+    "state": "string",
+    "country": "string",
+    "postcode": "string"
+  },
+
+  "LanguagesSpoken": {
+    "lang_id": "int (PK)",
+    "persona_id": "int (FK -> Personas)",
+    "language": "string"
+  },
+
+  "Hobbies": {
+    "hobby_id": "int (PK)",
+    "persona_id": "int (FK -> Personas)",
+    "hobby": "string"
+  },
+
+  "ProfessionalDetails": {
+    "prof_id": "int (PK)",
+    "persona_id": "int (FK -> Personas)",
+    "current_job_title": "string",
+    "current_employer": "string",
+    "experience_in_current_company": "string",
+    "salary": "string",
+    "years_of_experience": "int"
+  },
+
+  "WorkExperience": {
+    "exp_id": "int (PK)",
+    "prof_id": "int (FK -> ProfessionalDetails)",
+    "job_title": "string",
+    "company": "string",
+    "start_date": "date",
+    "end_date": "date"
+  },
+
+  "Education": {
+    "edu_id": "int (PK)",
+    "prof_id": "int (FK -> ProfessionalDetails)",
+    "degree": "string",
+    "institution": "string",
+    "start_date": "date",
+    "end_date": "date"
+  },
+
+  "Skills": {
+    "skill_id": "int (PK)",
+    "prof_id": "int (FK -> ProfessionalDetails)",
+    "skill": "string"
+  },
+
+  "ProfessionalAchievements": {
+    "ach_id": "int (PK)",
+    "prof_id": "int (FK -> ProfessionalDetails)",
+    "achievement": "string"
+  },
+
+  "AwardsAndCertifications": {
+    "award_id": "int (PK)",
+    "prof_id": "int (FK -> ProfessionalDetails)",
+    "award_name": "string"
+  },
+
+  "ProjectsLed": {
+    "project_id": "int (PK)",
+    "prof_id": "int (FK -> ProfessionalDetails)",
+    "project_name": "string"
+  },
+
+  "JobPreferences": {
+    "pref_id": "int (PK)",
+    "persona_id": "int (FK -> Personas)",
+    "preferred_work_location": "string",
+    "work_location_flexibility": "string",
+    "preferred_company_size": "string",
+    "willing_to_relocate": "string",
+    "max_commuting_time": "string",
+    "work_schedule_preference": "string"
+  },
+
+  "PreferredIndustries": {
+    "industry_id": "int (PK)",
+    "pref_id": "int (FK -> JobPreferences)",
+    "industry": "string"
+  },
+
+  "PreferredJobTypes": {
+    "jobtype_id": "int (PK)",
+    "pref_id": "int (FK -> JobPreferences)",
+    "job_type": "string"
+  },
+
+  "SalaryExpectations": {
+    "salary_id": "int (PK)",
+    "persona_id": "int (FK -> Personas)",
+    "min_salary": "string",
+    "expected_salary": "string",
+    "max_salary": "string",
+    "salary_negotiable": "string",
+    "benefits_importance": "string"
+  },
+
+  "PreferredBenefits": {
+    "benefit_id": "int (PK)",
+    "salary_id": "int (FK -> SalaryExpectations)",
+    "benefit": "string"
+  },
+
+  "CareerPreferences": {
+    "career_id": "int (PK)",
+    "persona_id": "int (FK -> Personas)",
+    "career_stage": "string",
+    "leadership_interest": "string",
+    "preferred_team_size": "string",
+    "growth_aspiration": "string"
+  },
+
+  "LearningPreferences": {
+    "learning_id": "int (PK)",
+    "career_id": "int (FK -> CareerPreferences)",
+    "learning_type": "string"
+  },
+
+  "WorkEnvironmentPreferences": {
+    "env_id": "int (PK)",
+    "persona_id": "int (FK -> Personas)",
+    "work_life_balance": "string",
+    "travel_requirement": "string",
+    "meeting_preference": "string"
+  },
+
+  "CompanyCulture": {
+    "culture_id": "int (PK)",
+    "env_id": "int (FK -> WorkEnvironmentPreferences)",
+    "culture": "string"
+  },
+
+  "CommunicationStyle": {
+    "comm_id": "int (PK)",
+    "env_id": "int (FK -> WorkEnvironmentPreferences)",
+    "style": "string"
+  },
+
+  "PersonalPreferences": {
+    "perspref_id": "int (PK)",
+    "persona_id": "int (FK -> Personas)"
+  },
+
+  "LifestylePreferences": {
+    "lifestyle_id": "int (PK)",
+    "perspref_id": "int (FK -> PersonalPreferences)",
+    "preference": "string"
+  },
+
+  "FamilyConsiderations": {
+    "family_id": "int (PK)",
+    "perspref_id": "int (FK -> PersonalPreferences)",
+    "consideration": "string"
+  },
+
+  "HealthAndWellness": {
+    "health_id": "int (PK)",
+    "perspref_id": "int (FK -> PersonalPreferences)",
+    "wellness": "string"
+  },
+
+  "FinancialGoals": {
+    "goal_id": "int (PK)",
+    "perspref_id": "int (FK -> PersonalPreferences)",
+    "goal": "string"
+  },
+
+  "SocialPreferences": {
+    "social_id": "int (PK)",
+    "perspref_id": "int (FK -> PersonalPreferences)",
+    "preference": "string"
+  },
+
+  "ImportantMilestones": {
+    "milestone_id": "int (PK)",
+    "persona_id": "int (FK -> Personas)",
+    "milestone": "string",
+    "milestone_date": "date",
+    "significance": "string"
+  },
+
+  "Goals": {
+    "goalset_id": "int (PK)",
+    "persona_id": "int (FK -> Personas)"
+  },
+
+  "ShortTermGoals": {
+    "short_id": "int (PK)",
+    "goalset_id": "int (FK -> Goals)",
+    "goal": "string"
+  },
+
+  "LongTermGoals": {
+    "long_id": "int (PK)",
+    "goalset_id": "int (FK -> Goals)",
+    "goal": "string"
+  }
+}
