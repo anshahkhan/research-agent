@@ -14,24 +14,21 @@ This project builds a WhatsApp Research Agent using Baileys. The bot asks users 
    ```bash
    git clone https://github.com/clueai/research-agent.git
    cd research-agent
-```
+
 
 - **Install dependencies**
-```
+
 npm install
 
-```
+
 - **Add your credentials to .env**
-```
 
 DB_URL=postgres:./personas.db
 MEM0_API_KEY=your-key
 GEMINI_API_KEY=your-key
 
-```
 - **Run Your Bot**
-```
 
-npm start
+npm run dev
 
 ```
