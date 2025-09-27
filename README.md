@@ -17,18 +17,16 @@ This project builds a WhatsApp Research Agent using Baileys. The bot asks users 
 
 
 - **Install dependencies**
-
+```
 npm install
 
 
 - **Add your credentials to .env**
-
+```
 DB_URL=postgres:./personas.db
 MEM0_API_KEY=your-key
 GEMINI_API_KEY=your-key
 
 - **Run Your Bot**
-
-npm run dev
-
 ```
+npm run dev
