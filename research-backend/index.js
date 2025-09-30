@@ -2,19 +2,27 @@ import makeWASocket, { useMultiFileAuthState } from "@whiskeysockets/baileys";
 import qrcode from "qrcode-terminal";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import config from "./config.js";
-import { introFlow } from "./flow/consent.js";
-import { runQuestionnaire } from "./flow/questionnaire.js";
+import { handleConsent, introFlow } from "./src/flow/consent.js";
+import { runQuestionnaire } from "./src/flow/questionnaire.js";
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 const model = genAI.getGenerativeModel({ model: config.modelName });
 
 async function startBot() {
   const { state, saveCreds } = await useMultiFileAuthState("session");
-  const sock = makeWASocket({ auth: state, printQRInTerminal: true });
+  const sock = makeWASocket({ auth: state }); // removed printQRInTerminal
+
   sock.ev.on("creds.update", saveCreds);
 
-  sock.ev.on("connection.update", ({ connection }) => {
-    if (connection === "open") console.log("✅ Bot connected!");
+  // ✅ Proper QR handling
+  sock.ev.on("connection.update", ({ connection, qr }) => {
+    if (qr) {
+      console.log("📲 Scan this QR in WhatsApp -> Linked Devices");
+      qrcode.generate(qr, { small: true });
+    }
+    if (connection === "open") {
+      console.log("✅ Bot connected!");
+    }
   });
 
   sock.ev.on("messages.upsert", async ({ messages }) => {
