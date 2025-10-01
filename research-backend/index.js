@@ -1,18 +1,17 @@
 // index.js
 import makeWASocket, { useMultiFileAuthState } from "@whiskeysockets/baileys";
 import qrcode from "qrcode-terminal";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import config from "./config.js";
 import { introFlow } from "./src/flow/consent.js";
 import { runQuestionnaire } from "./src/flow/questionnare.js";
 
-// Initialize Gemini
-const genAI = new GoogleGenerativeAI(config.geminiApiKey);
-const model = genAI.getGenerativeModel({ model: config.modelName });
+// === Initialize Gemini ===
+const ai = new GoogleGenAI({ apiKey: config.geminiApiKey });
 
 async function startBot() {
   const { state, saveCreds } = await useMultiFileAuthState("session");
-  const sock = makeWASocket({ auth: state }); // removed printQRInTerminal
+  const sock = makeWASocket({ auth: state }); // removed deprecated option
 
   // Save session
   sock.ev.on("creds.update", saveCreds);
@@ -31,43 +30,56 @@ async function startBot() {
   });
 
   // Message handler
-  sock.ev.on("messages.upsert", async ({ messages }) => {
-    const msg = messages[0];
-    if (!msg?.message) return;
+sock.ev.on("messages.upsert", async ({ messages }) => {
+  const msg = messages[0];
+  if (!msg?.message) return;
 
-    const from = msg.key.remoteJid;
-    const text =
-      msg.message.conversation ||
-      msg.message.extendedTextMessage?.text ||
-      msg.message.imageMessage?.caption ||
-      "";
+  // 🚫 Prevent echo loop
+  if (msg.key.fromMe) return;
 
-    if (!text) return;
+  const from = msg.key.remoteJid;
+  const text =
+    msg.message.conversation ||
+    msg.message.extendedTextMessage?.text ||
+    msg.message.imageMessage?.caption ||
+    "";
 
-    console.log(`💬 ${from}: ${text}`);
+  if (!text) return;
+  console.log(`💬 ${from}: ${text}`);
 
-    // === Flow Control ===
-    if (text.toLowerCase() === "hi") {
-      await sock.sendMessage(from, { text: introFlow() });
-      return;
-    }
+  // === Flow Control ===
+  if (text.toLowerCase() === "hi") {
+    await sock.sendMessage(from, { text: introFlow() });
+    return;
+  }
 
-    if (text.toLowerCase().startsWith("q:")) {
-      const answer = await runQuestionnaire(text);
-      await sock.sendMessage(from, { text: answer });
-      return;
-    }
+  if (text.toLowerCase().startsWith("q:")) {
+    const answer = await runQuestionnaire(text);
+    await sock.sendMessage(from, { text: answer });
+    return;
+  }
 
-    // === Default: Ask Gemini ===
-    try {
-      const result = await model.generateContent(text);
-      const reply = result.response.text();
-      await sock.sendMessage(from, { text: reply });
-    } catch (err) {
-      console.error("❌ Gemini API error:", err);
-      await sock.sendMessage(from, { text: "⚠️ Gemini API error. Try again later." });
-    }
+  // === Default: Ask Gemini ===
+ try {
+  const result = await ai.models.generateContent({
+    model: config.modelName,
+    contents: text,
   });
+
+  // Handle both shapes of the SDK response
+  const candidates =
+    result?.response?.candidates || result?.candidates || [];
+
+  const reply =
+    candidates[0]?.content?.parts?.[0]?.text?.trim() ||
+    "⚠️ No reply generated.";
+
+  await sock.sendMessage(from, { text: reply });
+} catch (err) {
+  console.error("❌ Gemini API error:", err);
+  await sock.sendMessage(from, { text: "⚠️ Gemini API error. Try again later." });
+}
+});
 }
 
 startBot();

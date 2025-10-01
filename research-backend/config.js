@@ -1,4 +1,4 @@
 export default {
-  geminiApiKey: "YOUR_GEMINI_API_KEY", // 🔑 put key here
-  modelName: "gemini-pro",
+  geminiApiKey: "AIzaSyClM_fPyXdKGxyp68CmdN3wueeHiObl8xo",
+  modelName: "gemini-2.5-flash",
 };
