@@ -29,5 +29,14 @@ This project builds a WhatsApp Research Agent using Baileys. The bot asks users 
    GEMINI_API_KEY=your-key
 
 - **Run Your Bot**
+HEAD
+```
+
+npm start
+
+```
+# Test update by Arooba
+
    ```bash
    npm run dev
+ origin/develop
