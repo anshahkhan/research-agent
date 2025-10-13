@@ -2,8 +2,15 @@ import makeWASocket, { useMultiFileAuthState } from "@whiskeysockets/baileys";
 import qrcode from "qrcode-terminal";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import config from "./config.js";
-import { introFlow } from "./flow/consent.js";
-import { runQuestionnaire } from "./flow/questionnaire.js";
+// import { introFlow } from "./flow/consent.js";
+// import { runQuestionnaire } from "./flow/questionnaire.js";
+
+import sequelize from './src/config/database.js';
+
+sequelize.authenticate()
+  .then(() => console.log('✅ MySQL connected!'))
+  .catch(err => console.error('❌ DB connection error:', err));
+
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 const model = genAI.getGenerativeModel({ model: config.modelName });
