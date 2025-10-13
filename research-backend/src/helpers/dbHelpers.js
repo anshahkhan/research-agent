@@ -1,49 +1,43 @@
-const User = require('../models/User');
-const Message = require('../models/Message');
+import User from '../models/User.js';
+import Message from '../models/Message.js';
 
-async function getOrCreateUser(waId) {
-  const [user] = await User.findOrCreate({ where: { waId } });
+/** Get or create user based on WhatsApp ID */
+export async function getOrCreateUser(whatsappId) {
+  const [user] = await User.findOrCreate({ where: { whatsappId } });
   return user;
 }
 
-async function saveMessage({ waId, direction, content, questionKey, parsedField }) {
-  const user = await getOrCreateUser(waId);
+/** Save message for a user */
+export async function saveMessage({ whatsappId, messageText }) {
+  await getOrCreateUser(whatsappId);
   return await Message.create({
-    userId: user.id,
-    direction,
-    content,
-    questionKey,
-    parsedField,
+    whatsappId,
+    messageText
   });
 }
 
-async function saveSession(waId, sessionData) {
-  const user = await getOrCreateUser(waId);
-  user.sessionId = sessionData.id || null;
-  user.metadata = { sessionData };
+/** Save session data for a user */
+export async function saveSession(whatsappId, sessionData) {
+  const user = await getOrCreateUser(whatsappId);
+  user.sessionData = sessionData;
   await user.save();
 }
 
-async function getSession(waId) {
-  const user = await User.findOne({ where: { waId } });
-  return user ? user.metadata?.sessionData || null : null;
+/** Get session data for a user */
+export async function getSession(whatsappId) {
+  const user = await User.findOne({ where: { whatsappId } });
+  return user ? user.sessionData : null;
 }
 
-async function setConsent(waId, consent) {
-  const user = await getOrCreateUser(waId);
-  user.consent = consent;
+/** Set user consent */
+export async function setConsent(whatsappId, consentGiven) {
+  const user = await getOrCreateUser(whatsappId);
+  user.consentGiven = consentGiven;
   await user.save();
 }
 
-async function getConsent(waId) {
-  const user = await User.findOne({ where: { waId } });
-  return user ? user.consent : 'unknown';
+/** Get user consent */
+export async function getConsent(whatsappId) {
+  const user = await User.findOne({ where: { whatsappId } });
+  return user ? user.consentGiven : null;
 }
-
-module.exports = {
-  saveMessage,
-  saveSession,
-  getSession,
-  setConsent,
-  getConsent
-};

@@ -4,8 +4,14 @@ import Message from '../models/Message.js';
 
 (async () => {
   try {
+    // Initialize models before syncing
+    await sequelize.authenticate();
+    console.log("✅ Database connected successfully!");
+
+    // Sync all models
     await sequelize.sync({ alter: true });
     console.log("✅ Database synced successfully!");
+
     process.exit(0);
   } catch (err) {
     console.error("❌ Database sync failed:", err);
